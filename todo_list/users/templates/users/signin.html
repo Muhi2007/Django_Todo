@@ -1,20 +1,19 @@
 {% extends 'todos/base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}Sign In{% endblock %}
 
 {% block content %} 
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <h2 class="mb-4">Sign Up</h2>
+        <h2 class="mb-4">Sign In</h2>
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="col-form-label">Create your account</legend>
+                <legend class="col-form-label">Please enter your credentials</legend>
                 {{ form|crispy }}
             </fieldset>
-
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <button type="submit" class="btn btn-primary">Sign In</button>
         </form>
     </div>
 </div>
