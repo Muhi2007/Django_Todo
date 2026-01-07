@@ -1,0 +1,22 @@
+# --- Python & Virtual Environments ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+
+# --- Django Stuff ---
+*.log
+local_settings.py
+db.sqlite3
+media/
+
+# --- Environment Variables (Security Risk!) ---
+.env
+
+# --- IDE Settings (Optional but recommended) ---
+.idea/
+.vscode/
+*.swp
