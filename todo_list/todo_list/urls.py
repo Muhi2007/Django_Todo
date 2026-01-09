@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from users import views as user_view
 from django.contrib.auth import views as auth_view
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +27,8 @@ urlpatterns = [
     path('signin/', auth_view.LoginView.as_view(template_name = 'users/signin.html'), name='signin'),
     path('signup/', user_view.signup, name='signup'),
     path('signout/', auth_view.LogoutView.as_view(template_name = 'users/signout.html'), name='signout'),
+    path('profile/', user_view.profile, name='profile'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
