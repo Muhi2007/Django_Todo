@@ -1,7 +1,45 @@
 from django.shortcuts import render
-
-def home(request):
-    return render(request, template_name='todos/home.html')
+from django.views.generic import CreateView, UpdateView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from .models import Task
+from .forms import TaskCreationForm, TaskEditForm
 
 def about(request):
     return render(request, template_name='todos/about.html')
+
+class TaskListView(ListView):
+    model = Task
+    template_name = 'todos/home.html'
+    context_object_name = 'tasks'
+    paginate_by = 5
+
+class UserTaskView(ListView):
+    model = Task
+    template_name = 'todos/home.html'
+    context_object_name = 'tasks'
+    paginate_by = 5
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        return Task.objects.filter(author__username=username)
+
+class TaskCreateView(LoginRequiredMixin ,CreateView):
+    model = Task
+    template_name = 'todos/task_create.html'
+    form_class = TaskCreationForm
+    success_url = reverse_lazy('todo-home')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class TaskEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Task
+    template_name = 'todos/task_create.html'
+    form_class = TaskEditForm
+    success_url = reverse_lazy('todo-home')
+
+    def test_func(self):
+        task = self.get_object()
+        return task.author == self.request.user

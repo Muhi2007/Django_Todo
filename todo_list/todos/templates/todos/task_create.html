@@ -1,0 +1,20 @@
+{% extends 'todos/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Task Form{% endblock %}
+
+{% block content %} 
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="mb-4">Task</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="col-form-label">Please enter your credentials</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Save Task</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
