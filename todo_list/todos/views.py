@@ -67,12 +67,21 @@ def task_group_detail(request, pk):
         return redirect('todo-home')
     
     if request.method == 'POST':
-        form = TodoForm(request.POST)
-        if form.is_valid():
-            todo = form.save(commit=False)
-            todo.parent = group
+        if 'action' in request.POST and request.POST['action'] == 'toggle':
+            todo_id = request.POST.get('todo_id')
+            todo = get_object_or_404(Todo, id=todo_id, parent=group)
+            todo.done = not todo.done
             todo.save()
-            return redirect('task-group-detail', pk=pk)
+
+            next_url = request.POST.get('next') or request.GET.get('next')
+            return redirect(next_url or reverse_lazy('todo-home'))
+        else:
+            form = TodoForm(request.POST)
+            if form.is_valid():
+                todo = form.save(commit=False)
+                todo.parent = group
+                todo.save()
+                return redirect('task-group-detail', pk=pk)
     else:
         form = TodoForm()
 
@@ -88,12 +97,29 @@ class TaskGroupListView(LoginRequiredMixin, ListView):
     model = Todo
     template_name = 'todos/task_group_view.html'
     context_object_name = 'todos'
-    ordering = ['-time_create']
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
         group = get_object_or_404(TaskGroup, pk=pk)
         return group.tasks.all().order_by('-time_create')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group'] = getattr(self, 'group', get_object_or_404(TaskGroup, pk=self.kwargs.get('pk')))
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if 'action' in request.POST and request.POST['action'] == 'toggle':
+            pk = self.kwargs.get('pk')
+            todo_id = request.POST.get('todo_id')
+            todo = get_object_or_404(Todo, id=todo_id, parent__pk=pk, parent__author=request.user)
+            todo.done = not todo.done
+            todo.save()
+
+            next_url = request.POST.get('next') or request.GET.get('next')
+            return redirect(next_url or reverse_lazy('todo-home'))
+
+        return super().post(request, *args, **kwargs)
 
 class TodoEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Todo

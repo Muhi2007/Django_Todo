@@ -34,7 +34,16 @@
                     {% if todo.parent.author == user %}
                     <div>    
                         <a href="{% url 'todo-edit' todo.parent.id todo.id %}?next={{ request.path }}" class="btn btn-secondary text-decoration-none">Edit</a>
-                        <a href="#" class="btn btn-success text-decoration-none">Done</a>
+                        <form method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="todo_id" value="{{ todo.id }}">
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="toggle">
+
+                            <button type="submit" class="btn btn-success text-decoration-none">
+                                {% if todo.done %}Undo{% else %}Done{% endif %}
+                            </button>
+                        </form>
                     </div>
                     {% endif %}
                 </div>
