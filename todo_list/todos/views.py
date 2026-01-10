@@ -14,14 +14,14 @@ class TaskListView(ListView):
     model = TaskGroup
     template_name = 'todos/home.html'
     context_object_name = 'task_group'
-    paginate_by = 6
+    paginate_by = 4
     ordering = ['-time_create']
 
 class UserTaskView(ListView):
     model = TaskGroup
     template_name = 'todos/home.html'
     context_object_name = 'task_group'
-    paginate_by = 6
+    paginate_by = 4
     ordering = ['-time_create']
 
     def get_queryset(self):

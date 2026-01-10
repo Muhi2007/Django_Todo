@@ -21,7 +21,7 @@
                 <span class="badge bg-warning text-dark mb-2">Pending</span>
               {% endif %}
 
-              <h5 class="card-title"><a href="{% url 'task-group-list-view' tasks.id %}" class="text-decoration-none text-dark">{{ tasks.title }}</a></h5>
+              <h5 class="card-title"><a href="{% url 'task-group-list-view' tasks.id %}" class="text-decoration-none">{{ tasks.title }}</a></h5>
               <p class="card-text text-muted">{{ tasks.description }}</p>
             </div>
             <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
@@ -29,9 +29,9 @@
                 <div class="content">
                     {% if tasks.author == user %}
                         <a href="{% url 'task-edit' tasks.id %}" class="btn btn-sm btn-secondary">Edit</a>
-                        <a href="{% url 'task-delete' tasks.id %}" class="btn-danger btn btn-sm btn-danger">Delete</a>
+                        <a href="{% url 'task-delete' tasks.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        <a href="{% url 'task-group-detail' tasks.id %}" class="btn btn-sm btn-primary">View</a>
                     {% endif %}
-                    <a href="{% url 'task-group-detail' tasks.id %}" class="btn btn-sm btn-primary">View</a>
                 </div>
             </div>
           </div>
