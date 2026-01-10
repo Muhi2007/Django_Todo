@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.urls import reverse
 
-class Task(models.Model):
+
+class TaskGroup(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField()
     done = models.BooleanField(default=False)
