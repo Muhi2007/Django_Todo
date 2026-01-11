@@ -101,7 +101,7 @@ class TaskGroupListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         pk = self.kwargs.get('pk')
         group = get_object_or_404(TaskGroup, pk=pk)
-        return group.tasks.all().order_by('-time_create')
+        return group.tasks.all().order_by('time_create')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
